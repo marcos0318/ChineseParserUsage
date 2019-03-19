@@ -3,10 +3,17 @@ import os
 targetPath = '/home/data/corpora/wikipedia/chinese-wiki/' 
 firstNames = os.listdir(targetPath)
 
-print(firstNames)
-
-
 files = []
+
+for firstName in firstNames:
+    fileNames = os.listdir(targetPath + firstName + '/')
+
+    for name in fileNames:
+        finalPath = targetPath + firstName + '/' + name
+
+        files.append(finalPath)
+
+print(len(files))
 
 for firstName in firstNames:
     fileNames = os.listdir(targetPath + firstName + '/')
