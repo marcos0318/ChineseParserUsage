@@ -113,6 +113,8 @@ if __name__ == "__main__":
     # print('end')
 
     all_parsed_result = []
+    folder_name = "AA"
+    file_name = "wiki_00"
     full_file_name = '/home/data/corpora/wikipedia/chinese-wiki/AA/wiki_00'
     sentences = list()
     with open(full_file_name, 'r', encoding='utf-8') as f:
@@ -122,7 +124,7 @@ if __name__ == "__main__":
         if len(sentence) < 3 or '<doc' in sentence[:10] or '</doc>' in sentence[:10]:
             continue
         try:
-            parsed_result = parse_sentense_with_stanford(sentence, nlp_id)
+            parsed_result = parse_sentense_with_stanford(sentence, 3)
         except TypeError:
             continue
         for sub_sentence_result in parsed_result:
