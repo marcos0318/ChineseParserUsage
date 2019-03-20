@@ -25,7 +25,7 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
     # '我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面' 
 
     # TODO: Replace the tmp output
-    request = """wget --post-data '""" + cleaned_sentence + """' 'localhost:10015/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - """
+    request = """wget --post-data '""" + cleaned_sentence + """' 'localhost: """ + str(10001 + nlp_id) + """/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - """
 
     respondStr = subprocess.check_output(request, shell=True)
 
@@ -33,8 +33,7 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
 
     # tmp_output = nlp.annotate(cleaned_sentence,
     #                           properties={'annotators': 'tokenize,depparse,lemma', 'outputFormat': 'json'})
-    # print(tmp_output)
-
+    
     parsed_examples = list()
     for s in tmp_output['sentences']:
         enhanced_dependency_list = s['enhancedPlusPlusDependencies']
@@ -83,27 +82,16 @@ def parse_sentense(folder_name, nlp_id):
                 all_parsed_result.append(sub_sentence_result)
 
         # print('We are storing parsing result for', counter, 'sentences')
-        file_name = '/data/xliucr/sActivityNet/WIKI/Parsed_data/' + folder_name+'_' + file_name + '.json'
+        file_name = '/home/data/corpora/wikipedia/ParsedChineseWiki/' + folder_name+'_' + file_name + '.json'
         file = open(file_name, 'w')
         json.dump(all_parsed_result, file)
         file.close()
         print(folder_name, 'finished')
 
 
-# all_parsed_result = list()
-# counter = 0
 
-# folder_names = os.listdir('/data/xliucr/sActivityNet/Wikipedia/enwiki-20180920-pages-articles')
-
-# pool = Pool(20)
-# for i, fo_name in enumerate(folder_names):
-#     pool.apply_async(parse_sentense, args=(fo_name, i % 15))
-# pool.close()
-# pool.join()
-
-# # parse_sentense(folder_names[0], 0)
-
-# print('end')
 
 if __name__ == "__main__":
-    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面'))
+    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 0))
+    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 10))
+    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 20))
