@@ -1,3 +1,5 @@
+# Actually the model that I used does not require the segmentation first. Just do it. throw that to the server! 
+
 import os
 from multiprocessing import Pool
 
