@@ -31,7 +31,7 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
 
     # tmp_output = nlp.annotate(cleaned_sentence,
     #                           properties={'annotators': 'tokenize,depparse,lemma', 'outputFormat': 'json'})
-
+    print(tmp_output)
 
     parsed_examples = list()
     for s in tmp_output['sentences']:
