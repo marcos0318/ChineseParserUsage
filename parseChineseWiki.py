@@ -100,14 +100,37 @@ if __name__ == "__main__":
     # print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 19))
 
 
-    folder_names = os.listdir('/home/data/corpora/wikipedia/chinese-wiki/')
+    # folder_names = os.listdir('/home/data/corpora/wikipedia/chinese-wiki/')
 
-    pool = Pool(20)
-    for i, fo_name in enumerate(folder_names):
-        pool.apply_async(parse_sentense, args=(fo_name, i % 20))
-    pool.close()
-    pool.join()
+    # pool = Pool(20)
+    # for i, fo_name in enumerate(folder_names):
+    #     pool.apply_async(parse_sentense, args=(fo_name, i % 20))
+    # pool.close()
+    # pool.join()
 
-    # parse_sentense(folder_names[0], 0)
+    # # parse_sentense(folder_names[0], 0)
 
-    print('end')
+    # print('end')
+
+    all_parsed_result = []
+    full_file_name = '/home/data/corpora/wikipedia/chinese-wiki/AA/wiki_00'
+    sentences = list()
+    with open(full_file_name, 'r', encoding='utf-8') as f:
+        for line in f:
+            sentences.append(line)
+    for sentence in sentences:
+        if len(sentence) < 3 or '<doc' in sentence[:10] or '</doc>' in sentence[:10]:
+            continue
+        try:
+            parsed_result = parse_sentense_with_stanford(sentence, nlp_id)
+        except TypeError:
+            continue
+        for sub_sentence_result in parsed_result:
+            all_parsed_result.append(sub_sentence_result)
+
+    # print('We are storing parsing result for', counter, 'sentences')
+    file_name = '/home/data/corpora/wikipedia/ParsedChineseWiki/' + folder_name+'_' + file_name + '.json'
+    file = open(file_name, 'w')
+    json.dump(all_parsed_result, file)
+    file.close()
+    print(folder_name, 'finished')
