@@ -27,7 +27,7 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
     # TODO: Replace the tmp output
     request = """wget --post-data '""" + cleaned_sentence + """' 'localhost:10015/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - """
 
-    tmp_output = subprocess.check_output(request)
+    tmp_output = subprocess.check_output(request, shell=True)
 
     # tmp_output = nlp.annotate(cleaned_sentence,
     #                           properties={'annotators': 'tokenize,depparse,lemma', 'outputFormat': 'json'})
