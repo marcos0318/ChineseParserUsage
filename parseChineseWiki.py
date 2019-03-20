@@ -8,11 +8,12 @@ import subprocess
 # Use subprocess to catch stdout of program
 #  output = subprocess.check_output('ping localhost', stderr=subprocess.STDOUT, shell=True)
 valid_chars = set("""qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890`~!@#$%^&*/?., ;:"'""")
+invalid_chars = set("""`~!@#$%^&*/?., ;:"'""")
 
 def clean_sentence_for_parsing(input_sentence):
     new_sentence = ''
     for char in input_sentence:
-        if char in valid_chars:
+        if char not in invalid_chars:
             new_sentence += char
         else:
             new_sentence += '\n'
@@ -20,7 +21,7 @@ def clean_sentence_for_parsing(input_sentence):
 
 def parse_sentense_with_stanford(input_sentence, nlp_id=0):
     # Cannot clean for Chinese Charactor
-    cleaned_sentence = input_sentence
+    cleaned_sentence = clean_sentence_for_parsing(input_sentence)
 
     # '我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面' 
 
