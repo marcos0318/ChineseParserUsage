@@ -61,12 +61,12 @@ def parse_sentense(folder_name, nlp_id):
     """
     make sure that the last element in counters satisfies x%10000=0
     """
-    file_names = os.listdir('/data/xliucr/sActivityNet/Wikipedia/enwiki-20180920-pages-articles/'+folder_name)
+    file_names = os.listdir('/home/data/corpora/wikipedia/chinese-wiki/'+folder_name)
     print('We are working on folder:', folder_name)
     print('Number of files:', len(file_names))
     for file_name in file_names:
         all_parsed_result = []
-        full_file_name = '/data/xliucr/sActivityNet/Wikipedia/enwiki-20180920-pages-articles/'+folder_name + '/'+file_name
+        full_file_name = '/home/data/corpora/wikipedia/chinese-wiki/'+folder_name + '/'+file_name
         sentences = list()
         with open(full_file_name, 'r', encoding='utf-8') as f:
             for line in f:
@@ -92,6 +92,22 @@ def parse_sentense(folder_name, nlp_id):
 
 
 if __name__ == "__main__":
-    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 0))
-    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 10))
-    print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 20))
+
+
+
+    # print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 0))
+    # print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 10))
+    # print(parse_sentense_with_stanford('我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面', 19))
+
+
+    folder_names = os.listdir('/home/data/corpora/wikipedia/chinese-wiki/')
+
+    pool = Pool(20)
+    for i, fo_name in enumerate(folder_names):
+        pool.apply_async(parse_sentense, args=(fo_name, i % 20))
+    pool.close()
+    pool.join()
+
+    # parse_sentense(folder_names[0], 0)
+
+    print('end')
