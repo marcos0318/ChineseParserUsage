@@ -25,9 +25,13 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
 
     # '我喜欢吃美味的寿司，不喜欢吃难吃的炸酱面' 
 
+
+    # wget --post-data '我喜欢吃美味的汉堡' 'localhost:10011/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - 
+
     # TODO: Replace the tmp output
     request = """wget --post-data '""" + cleaned_sentence + """' 'localhost:""" + str(10001 + nlp_id) + """/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - """
 
+  
     respondStr = subprocess.check_output(request, shell=True)
 
     tmp_output = json.loads(respondStr)
@@ -66,6 +70,12 @@ def parse_sentense(folder_name, nlp_id):
     print('We are working on folder:', folder_name)
     print('Number of files:', len(file_names))
     for file_name in file_names:
+        file_path = '/home/data/corpora/wikipedia/ParsedChineseWiki/' + folder_name+'_' + file_name + '.json'
+
+        exists = os.path.isfile(file_path)
+        if exists:
+            continue
+        
         all_parsed_result = []
         full_file_name = '/home/data/corpora/wikipedia/chinese-wiki/'+folder_name + '/'+file_name
         sentences = list()
@@ -77,8 +87,9 @@ def parse_sentense(folder_name, nlp_id):
                 continue
             try:
                 parsed_result = parse_sentense_with_stanford(sentence, nlp_id)
-            except TypeError:
+            except:
                 continue
+
             for sub_sentence_result in parsed_result:
                 all_parsed_result.append(sub_sentence_result)
 
