@@ -73,7 +73,7 @@ def count_rel_freq_ppmi(filename):
 
 
 if __name__ == "__main__":
-    wikiPath = "/home/data/corpora/wikipedia/enwiki2018/Parsed_data/"
+    wikiPath = "/home/data/corpora/wikipedia/ParsedChineseWiki/"
     file_list = [fileName for fileName in os.listdir(wikiPath) if fileName.endswith(".json")]
 
     with Pool(processes = 25) as pool:   
