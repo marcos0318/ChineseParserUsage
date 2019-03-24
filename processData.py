@@ -1,17 +1,74 @@
 # stats 
 # pairs counting
 # sample table
-
-
+from collections import Counter
+import pickle
 
 fileName = "/home/data/corpora/wikipedia/ParsedChineseWikiDepText/relationalText.txt"
-
+fileNameamod = "/home/data/corpora/wikipedia/ParsedChineseWikiDepText/relationalText.amod.txt"
+fileNamedobj = "/home/data/corpora/wikipedia/ParsedChineseWikiDepText/relationalText.dobj.txt"
+fileNamensubj = "/home/data/corpora/wikipedia/ParsedChineseWikiDepText/relationalText.nsubj.txt"
 
 wordList = []
-pairList = []
+# pairList = []
 
 with open(fileName, "r") as f:
     for line in f:
         words = line.strip().split()
-        print(words)
-        break
+        # pairList.append(tuple(words))
+        wordList.append(words[0])
+        wordList.append(words[1])
+
+
+wordCounter = Counter(wordList).most_common(100000)
+# pairCounter = Counter(pairList)
+
+wordList = list(wordCounter)
+
+
+# corpus_stats.pkl
+corpus_stats = dict()
+corpus_stats["id2word"] = {i: word for i, word in enumerate(wordList)}
+corpus_stats["word2id"] = {word: i for i, word in enumerate(wordList)}
+corpus_stats["vocab_size"] = len(wordList)
+
+print(corpus_stats)
+with open("corpus_stats.pkl", "w") as fout:
+    pickle.dump(corpus_stats, fout)
+
+
+
+rels = ["amod", "dobj", "nsubj"]
+pairsCountingResult = {}
+sampleTableResult = {}
+for i, fileName in enumerate([fileNameamod, fileNamedobj, fileNamensubj]):
+    pairList = []
+    argumentList = []
+    with open(fileName, "r") as f:
+        for line in f:
+            words = line.strip().split()
+            try:
+                wordids = [corpus_stats["word2id"][word] for word in words]
+            except:
+                continue
+
+            pairList.append(tuple(wordids))
+            argumentList.append(words[1])
+
+    pairCounter = dict(Counter(pairList))
+    pairsCountingResult[rel[i]] = pairCounter
+
+
+    argumentCounter = dict(Counter(argumentList))
+    sampleTableResult[rel[i]] = argumentCounter
+
+
+with open("count.pkl", "w") as fout:
+    pickle.dump(pairsCountingResult, fout)
+
+
+with open("sample_table.pkl", "w") as fout:
+    pickle.dump(sampleTableResult, fout)
+
+       
+       
