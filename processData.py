@@ -25,6 +25,7 @@ wordCounter = Counter(wordList).most_common(100000)
 
 wordList = list(wordCounter)
 
+print(wordList[:10])
 
 # corpus_stats.pkl
 corpus_stats = dict()
@@ -32,7 +33,10 @@ corpus_stats["id2word"] = {i: word for i, word in enumerate(wordList)}
 corpus_stats["word2id"] = {word: i for i, word in enumerate(wordList)}
 corpus_stats["vocab_size"] = len(wordList)
 
-print(corpus_stats)
+
+
+
+# print(corpus_stats)
 with open("corpus_stats.pkl", "wb") as fout:
     pickle.dump(corpus_stats, fout)
 
