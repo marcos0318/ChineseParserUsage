@@ -43,26 +43,39 @@ class Model:
             
 
 
-            W_amod = tf.get_variable("amod_tranform_matrix", [rel_length, embed_size])
-            W_nsubj = tf.get_variable("nsubj_tranform_matrix", [rel_length, embed_size])
-            W_dobj = tf.get_variable("dobj_tranform_matrix", [rel_length, embed_size])
+            self.W_amod = tf.get_variable("amod_tranform_matrix", [rel_length, embed_size])
+            self.W_nsubj = tf.get_variable("nsubj_tranform_matrix", [rel_length, embed_size])
+            self.W_dobj = tf.get_variable("dobj_tranform_matrix", [rel_length, embed_size])
+
+
 
 
             self.center_emb = tf.get_variable("center_emb", [vocab_size, embed_size], trainable=args.center_trainable)
-            self.amod_emb = tf.matmul(tf.get_variable("amod_emb", [vocab_size, rel_length]), W_amod)
-            self.nsubj_emb = tf.matmul(tf.get_variable("nsubj_emb", [vocab_size, rel_length]), W_nsubj)
-            self.dobj_emb = tf.matmul(tf.get_variable("dobj_emb", [vocab_size, rel_length]), W_dobj)
+
+            self.small_amod_emb = tf.get_variable("amod_emb", [vocab_size, rel_length])
+            self.small_nsubj_emb = tf.get_variable("nsubj_emb", [vocab_size, rel_length])
+            self.small_dobj_emb = tf.get_variable("dobj_emb", [vocab_size, rel_length])
+
+            self.amod_emb = tf.matmul(self.small_amod_emb, self.W_amod)
+            self.nsubj_emb = tf.matmul(self.small_nsubj_emb, self.W_nsubj)
+            self.dobj_emb = tf.matmul(self.small_dobj_emb, self.W_dobj)
 
 
-            W_amod_context = tf.get_variable("amod_context_tranform_matrix", [rel_length, embed_size])
-            W_nsubj_context = tf.get_variable("nsubj_context_tranform_matrix", [rel_length, embed_size])
-            W_dobj_context = tf.get_variable("dobj_context_tranform_matrix", [rel_length, embed_size])
+            self.W_amod_context = tf.get_variable("amod_context_tranform_matrix", [rel_length, embed_size])
+            self.W_nsubj_context = tf.get_variable("nsubj_context_tranform_matrix", [rel_length, embed_size])
+            self.W_dobj_context = tf.get_variable("dobj_context_tranform_matrix", [rel_length, embed_size])
 
 
             self.center_emb_context = tf.get_variable("center_emb_context", [vocab_size, embed_size], trainable=args.center_trainable)
-            self.amod_emb_context = tf.matmul(tf.get_variable("amod_emb_context", [vocab_size, rel_length]), W_amod_context)
-            self.nsubj_emb_context = tf.matmul(tf.get_variable("nsubj_emb_context", [vocab_size, rel_length]), W_nsubj_context)
-            self.dobj_emb_context = tf.matmul(tf.get_variable("dobj_emb_context", [vocab_size, rel_length]), W_dobj_context)
+
+            self.small_amod_emb_context = tf.get_variable("amod_emb_context", [vocab_size, rel_length])
+            self.small_nsubj_emb_context = tf.get_variable("nsubj_emb_context", [vocab_size, rel_length])
+            self.small_dobj_emb_context = tf.get_variable("dobj_emb_context", [vocab_size, rel_length])
+
+
+            self.amod_emb_context = tf.matmul( self.small_amod_emb_context, self.W_amod_context)
+            self.nsubj_emb_context = tf.matmul( self.small_nsubj_emb_context, self.W_nsubj_context)
+            self.dobj_emb_context = tf.matmul( self.small_dobj_emb_context, self.W_dobj_context)
 
             self.emb_placeholder = tf.placeholder(tf.float32, [vocab_size, embed_size])
             self.emb_init = self.center_emb.assign(self.emb_placeholder)
@@ -252,126 +265,7 @@ class Model:
         self.optimize = optimizer.minimize(self.loss)
 
 
-
-# def ws_test(sess, model, data, simlex_corps, num_cross, relation_length, restriction):
-
-#     word2id = data.word2id
-
-#     corp_names = ["v", "n", "adj", "all"]
-#     scores = {}
-
-#     with open("ws_gensim_result_c_%d_l_%d_r_%.3f.p "%(int(num_cross), relation_length, restriction), "wb") as fout:
-       
-
-#         for i in range(len(simlex_corps)):
-#             simlex_corpora = simlex_corps[i]
-
-
-#             id_score_triplets = []
-#             gold_scores = []
-#             for words_score_trplet in simlex_corpora:
-#                 try:
-#                     context1 = word2id[words_score_trplet[0]]
-#                     context2 = word2id[words_score_trplet[1]]
-#                     gold_score = words_score_trplet[2]
-#                     gold_scores.append(gold_score)
-
-#                     id_score_triplets.append([context1, context2])
-#                 except:
-#                     pass
-#             id_score_triplets = np.array(id_score_triplets)
-
-#             feed_dict = {
-#                 model.predicate_amod_ids: id_score_triplets[:, 0],
-#                 model.argument_amod_ids: id_score_triplets[:, 0],
-#                 model.predicate_dobj_ids: id_score_triplets[:, 0],
-#                 model.argument_dobj_ids: id_score_triplets[:, 0],
-#                 model.predicate_nsubj_ids: id_score_triplets[:, 0],
-#                 model.argument_nsubj_ids: id_score_triplets[:, 0]
-#             }
-
-
-            
-
-#             embeddings1 = {"base": {},
-#                            "amod": {},
-#                            "nsubj": {},
-#                            "dobj": {}
-#                           }
-
-
-#             result1 = sess.run([model.base_embedding_handler,
-#                                     model.base_embedding_context_handler,
-#                                     model.amod_embedding_handler,
-#                                     model.amod_embedding_context_handler,
-#                                     model.nsubj_embedding_handler,
-#                                     model.nsubj_embedding_context_handler,
-#                                     model.dobj_embedding_handler,
-#                                     model.dobj_embedding_context_handler
-#                                     ], feed_dict = feed_dict)
-
-#             embeddings1["base"]["h"],  embeddings1["base"]["t"], embeddings1["amod"]["h"],  embeddings1["amod"]["t"], \
-#             embeddings1["nsubj"]["h"],  embeddings1["nsubj"]["t"], embeddings1["dobj"]["h"],  embeddings1["dobj"]["t"] = result1
-
-#             feed_dict = {
-#                 model.predicate_amod_ids: id_score_triplets[:, 1],
-#                 model.argument_amod_ids: id_score_triplets[:, 1],
-#                 model.predicate_dobj_ids: id_score_triplets[:, 1],
-#                 model.argument_dobj_ids: id_score_triplets[:, 1],
-#                 model.predicate_nsubj_ids: id_score_triplets[:, 1],
-#                 model.argument_nsubj_ids: id_score_triplets[:, 1]
-#             }
-
-#             embeddings2 = {"base": {},
-#                            "amod": {},
-#                            "nsubj": {},
-#                            "dobj": {}
-#                           }
-
-#             result2 = sess.run([model.base_embedding_handler,
-#                                     model.base_embedding_context_handler,
-#                                     model.amod_embedding_handler,
-#                                     model.amod_embedding_context_handler,
-#                                     model.nsubj_embedding_handler,
-#                                     model.nsubj_embedding_context_handler,
-#                                     model.dobj_embedding_handler,
-#                                     model.dobj_embedding_context_handler
-#                                     ], feed_dict = feed_dict)
-
-#             embeddings2["base"]["h"],  embeddings2["base"]["t"], embeddings2["amod"]["h"],  embeddings2["amod"]["t"], \
-#             embeddings2["nsubj"]["h"],  embeddings2["nsubj"]["t"], embeddings2["dobj"]["h"],  embeddings2["dobj"]["t"] = result2
-
-#             for key in embeddings1.keys():
-#                 embeddings1[key]["h+t"] = embeddings1[key]["h"] + embeddings1[key]["t"]
-#                 embeddings1[key]["[h,t]"] = np.concatenate((embeddings1[key]["h"],  embeddings1[key]["t"]), axis = 1) 
-
-#             for key in embeddings2.keys():
-#                 embeddings2[key]["h+t"] = embeddings2[key]["h"] + embeddings2[key]["t"]
-#                 embeddings2[key]["[h,t]"] = np.concatenate((embeddings2[key]["h"],  embeddings2[key]["t"]), axis = 1) 
-
-
-#             relation_result = {}
-
-#             for relation_name in embeddings1.keys():
-#                 types_result = {}
-#                 for type_name in embeddings1[relation_name].keys():
-
-#                     model_predition_score = [ 1 - cosine(embeddings1[relation_name][type_name][j], embeddings2[relation_name][type_name][j]) for j in range(embeddings1[relation_name][type_name].shape[0])]
-
-            
-
-#                     r, p = spearmanr(gold_scores, model_predition_score)
-#                     types_result[type_name] = r
-                
-                
-#                 relation_result[relation_name] = types_result
-#                 print(corp_names[i], relation_name, types_result)
-#             scores[corp_names[i]] = relation_result
-#         pickle.dump(scores, fout)
-       
-#     return scores
         
-
 
 
 def sd_test(sess, model, data, batch_size, c, l, r):
@@ -535,7 +429,8 @@ def main():
            
         # save the center, relational, and transpose matrix
 
-        center_emb, amod_emb, nsubj_emb, dobj_emb = sess.run([m.center_emb, m.amod_emb, m.nsubj_emb, m.dobj_emb])
+        center_emb, amod_emb, nsubj_emb, dobj_emb = sess.run([m.center_emb, m.small_amod_emb, m.small_nsubj_emb, m.small_dobj_emb])
+        center_emb_context, amod_emb_context, nsubj_emb_context, dobj_emb_context = sess.run([m.center_emb_context, m.small_amod_emb_context, m.small_nsubj_emb_context, m.small_dobj_emb_context])
         with open('center_embedding.txt', 'w') as file_:
             for i in range(train_data.vocab_size):
               embed = center_emb[i, :]
@@ -559,6 +454,42 @@ def main():
               embed = nsubj_emb[i, :]
               word = train_data.id2word[i]
               file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('center_context_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = center_emb_context[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('amod_context_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = amod_emb_context[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('dobj_context_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = dobj_emb_context[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('nsubj_context_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = nsubj_emb_context[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+
+        W_amod, W_nsubj, W_dobj = sess.run([ m.W_amod, m.W_nsubj, m.W_dobj])
+        W_amod_context, W_nsubj_context, W_dobj_context = sess.run([ m.W_amod_context, m.W_nsubj_context, m.W_dobj_context])
+
+        np.savetxt(W_amod, "W_amod.txt")
+        np.savetxt(W_nsubj, "W_nsubj.txt")
+        np.savetxt(W_dobj, "W_dobj.txt")
+        np.savetxt(W_amod_context, "W_amod_context.txt")
+        np.savetxt(W_nsubj_context, "W_nsubj_context.txt")
+        np.savetxt(W_dobj_context, "W_dobj_context.txt")
+
 
 
 if __name__ == "__main__":
