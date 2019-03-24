@@ -533,6 +533,32 @@ def main():
             amod_acc, nsubj_acc, dobj_acc, total_acc = sd_test(sess, m, train_data, 100000, num_cross, args.relational_embedding_size, args.restrict)
             amod_acc, nsubj_acc, dobj_acc, total_acc = sd_test(sess, m, test_data, 100000, num_cross, args.relational_embedding_size, args.restrict)
            
+        # save the center, relational, and transpose matrix
+
+        center_emb, amod_emb, nsubj_emb, dobj_emb = sess.run([m.center_emb, m.amod_emb, m.nsubj_emb, m.dobj_emb)
+        with open('center_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = center_emb[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('amod_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = amod_emb[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+              
+        with open('dobj_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = dobj_emb[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
+
+        with open('nsubj_embedding.txt', 'w') as file_:
+            for i in range(train_data.vocab_size):
+              embed = nsubj_emb[i, :]
+              word = train_data.id2word[i]
+              file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
 
 
 if __name__ == "__main__":
