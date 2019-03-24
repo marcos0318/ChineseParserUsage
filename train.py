@@ -483,12 +483,12 @@ def main():
         W_amod, W_nsubj, W_dobj = sess.run([ m.W_amod, m.W_nsubj, m.W_dobj])
         W_amod_context, W_nsubj_context, W_dobj_context = sess.run([ m.W_amod_context, m.W_nsubj_context, m.W_dobj_context])
 
-        np.savetxt(W_amod, "W_amod.txt")
-        np.savetxt(W_nsubj, "W_nsubj.txt")
-        np.savetxt(W_dobj, "W_dobj.txt")
-        np.savetxt(W_amod_context, "W_amod_context.txt")
-        np.savetxt(W_nsubj_context, "W_nsubj_context.txt")
-        np.savetxt(W_dobj_context, "W_dobj_context.txt")
+        np.savetxt("W_amod.txt", W_amod)
+        np.savetxt("W_nsubj.txt", W_nsubj)
+        np.savetxt("W_dobj.txt", W_dobj)
+        np.savetxt( "W_amod_context.txt", W_amod_context)
+        np.savetxt( "W_nsubj_context.txt", W_nsubj_context)
+        np.savetxt( "W_dobj_context.txt", W_dobj_context)
 
 
 
