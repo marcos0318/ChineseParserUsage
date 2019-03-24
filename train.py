@@ -253,123 +253,123 @@ class Model:
 
 
 
-def ws_test(sess, model, data, simlex_corps, num_cross, relation_length, restriction):
+# def ws_test(sess, model, data, simlex_corps, num_cross, relation_length, restriction):
 
-    word2id = data.word2id
+#     word2id = data.word2id
 
-    corp_names = ["v", "n", "adj", "all"]
-    scores = {}
+#     corp_names = ["v", "n", "adj", "all"]
+#     scores = {}
 
-    with open("ws_gensim_result_c_%d_l_%d_r_%.3f.p "%(int(num_cross), relation_length, restriction), "wb") as fout:
+#     with open("ws_gensim_result_c_%d_l_%d_r_%.3f.p "%(int(num_cross), relation_length, restriction), "wb") as fout:
        
 
-        for i in range(len(simlex_corps)):
-            simlex_corpora = simlex_corps[i]
+#         for i in range(len(simlex_corps)):
+#             simlex_corpora = simlex_corps[i]
 
 
-            id_score_triplets = []
-            gold_scores = []
-            for words_score_trplet in simlex_corpora:
-                try:
-                    context1 = word2id[words_score_trplet[0]]
-                    context2 = word2id[words_score_trplet[1]]
-                    gold_score = words_score_trplet[2]
-                    gold_scores.append(gold_score)
+#             id_score_triplets = []
+#             gold_scores = []
+#             for words_score_trplet in simlex_corpora:
+#                 try:
+#                     context1 = word2id[words_score_trplet[0]]
+#                     context2 = word2id[words_score_trplet[1]]
+#                     gold_score = words_score_trplet[2]
+#                     gold_scores.append(gold_score)
 
-                    id_score_triplets.append([context1, context2])
-                except:
-                    pass
-            id_score_triplets = np.array(id_score_triplets)
+#                     id_score_triplets.append([context1, context2])
+#                 except:
+#                     pass
+#             id_score_triplets = np.array(id_score_triplets)
 
-            feed_dict = {
-                model.predicate_amod_ids: id_score_triplets[:, 0],
-                model.argument_amod_ids: id_score_triplets[:, 0],
-                model.predicate_dobj_ids: id_score_triplets[:, 0],
-                model.argument_dobj_ids: id_score_triplets[:, 0],
-                model.predicate_nsubj_ids: id_score_triplets[:, 0],
-                model.argument_nsubj_ids: id_score_triplets[:, 0]
-            }
+#             feed_dict = {
+#                 model.predicate_amod_ids: id_score_triplets[:, 0],
+#                 model.argument_amod_ids: id_score_triplets[:, 0],
+#                 model.predicate_dobj_ids: id_score_triplets[:, 0],
+#                 model.argument_dobj_ids: id_score_triplets[:, 0],
+#                 model.predicate_nsubj_ids: id_score_triplets[:, 0],
+#                 model.argument_nsubj_ids: id_score_triplets[:, 0]
+#             }
 
 
             
 
-            embeddings1 = {"base": {},
-                           "amod": {},
-                           "nsubj": {},
-                           "dobj": {}
-                          }
+#             embeddings1 = {"base": {},
+#                            "amod": {},
+#                            "nsubj": {},
+#                            "dobj": {}
+#                           }
 
 
-            result1 = sess.run([model.base_embedding_handler,
-                                    model.base_embedding_context_handler,
-                                    model.amod_embedding_handler,
-                                    model.amod_embedding_context_handler,
-                                    model.nsubj_embedding_handler,
-                                    model.nsubj_embedding_context_handler,
-                                    model.dobj_embedding_handler,
-                                    model.dobj_embedding_context_handler
-                                    ], feed_dict = feed_dict)
+#             result1 = sess.run([model.base_embedding_handler,
+#                                     model.base_embedding_context_handler,
+#                                     model.amod_embedding_handler,
+#                                     model.amod_embedding_context_handler,
+#                                     model.nsubj_embedding_handler,
+#                                     model.nsubj_embedding_context_handler,
+#                                     model.dobj_embedding_handler,
+#                                     model.dobj_embedding_context_handler
+#                                     ], feed_dict = feed_dict)
 
-            embeddings1["base"]["h"],  embeddings1["base"]["t"], embeddings1["amod"]["h"],  embeddings1["amod"]["t"], \
-            embeddings1["nsubj"]["h"],  embeddings1["nsubj"]["t"], embeddings1["dobj"]["h"],  embeddings1["dobj"]["t"] = result1
+#             embeddings1["base"]["h"],  embeddings1["base"]["t"], embeddings1["amod"]["h"],  embeddings1["amod"]["t"], \
+#             embeddings1["nsubj"]["h"],  embeddings1["nsubj"]["t"], embeddings1["dobj"]["h"],  embeddings1["dobj"]["t"] = result1
 
-            feed_dict = {
-                model.predicate_amod_ids: id_score_triplets[:, 1],
-                model.argument_amod_ids: id_score_triplets[:, 1],
-                model.predicate_dobj_ids: id_score_triplets[:, 1],
-                model.argument_dobj_ids: id_score_triplets[:, 1],
-                model.predicate_nsubj_ids: id_score_triplets[:, 1],
-                model.argument_nsubj_ids: id_score_triplets[:, 1]
-            }
+#             feed_dict = {
+#                 model.predicate_amod_ids: id_score_triplets[:, 1],
+#                 model.argument_amod_ids: id_score_triplets[:, 1],
+#                 model.predicate_dobj_ids: id_score_triplets[:, 1],
+#                 model.argument_dobj_ids: id_score_triplets[:, 1],
+#                 model.predicate_nsubj_ids: id_score_triplets[:, 1],
+#                 model.argument_nsubj_ids: id_score_triplets[:, 1]
+#             }
 
-            embeddings2 = {"base": {},
-                           "amod": {},
-                           "nsubj": {},
-                           "dobj": {}
-                          }
+#             embeddings2 = {"base": {},
+#                            "amod": {},
+#                            "nsubj": {},
+#                            "dobj": {}
+#                           }
 
-            result2 = sess.run([model.base_embedding_handler,
-                                    model.base_embedding_context_handler,
-                                    model.amod_embedding_handler,
-                                    model.amod_embedding_context_handler,
-                                    model.nsubj_embedding_handler,
-                                    model.nsubj_embedding_context_handler,
-                                    model.dobj_embedding_handler,
-                                    model.dobj_embedding_context_handler
-                                    ], feed_dict = feed_dict)
+#             result2 = sess.run([model.base_embedding_handler,
+#                                     model.base_embedding_context_handler,
+#                                     model.amod_embedding_handler,
+#                                     model.amod_embedding_context_handler,
+#                                     model.nsubj_embedding_handler,
+#                                     model.nsubj_embedding_context_handler,
+#                                     model.dobj_embedding_handler,
+#                                     model.dobj_embedding_context_handler
+#                                     ], feed_dict = feed_dict)
 
-            embeddings2["base"]["h"],  embeddings2["base"]["t"], embeddings2["amod"]["h"],  embeddings2["amod"]["t"], \
-            embeddings2["nsubj"]["h"],  embeddings2["nsubj"]["t"], embeddings2["dobj"]["h"],  embeddings2["dobj"]["t"] = result2
+#             embeddings2["base"]["h"],  embeddings2["base"]["t"], embeddings2["amod"]["h"],  embeddings2["amod"]["t"], \
+#             embeddings2["nsubj"]["h"],  embeddings2["nsubj"]["t"], embeddings2["dobj"]["h"],  embeddings2["dobj"]["t"] = result2
 
-            for key in embeddings1.keys():
-                embeddings1[key]["h+t"] = embeddings1[key]["h"] + embeddings1[key]["t"]
-                embeddings1[key]["[h,t]"] = np.concatenate((embeddings1[key]["h"],  embeddings1[key]["t"]), axis = 1) 
+#             for key in embeddings1.keys():
+#                 embeddings1[key]["h+t"] = embeddings1[key]["h"] + embeddings1[key]["t"]
+#                 embeddings1[key]["[h,t]"] = np.concatenate((embeddings1[key]["h"],  embeddings1[key]["t"]), axis = 1) 
 
-            for key in embeddings2.keys():
-                embeddings2[key]["h+t"] = embeddings2[key]["h"] + embeddings2[key]["t"]
-                embeddings2[key]["[h,t]"] = np.concatenate((embeddings2[key]["h"],  embeddings2[key]["t"]), axis = 1) 
+#             for key in embeddings2.keys():
+#                 embeddings2[key]["h+t"] = embeddings2[key]["h"] + embeddings2[key]["t"]
+#                 embeddings2[key]["[h,t]"] = np.concatenate((embeddings2[key]["h"],  embeddings2[key]["t"]), axis = 1) 
 
 
-            relation_result = {}
+#             relation_result = {}
 
-            for relation_name in embeddings1.keys():
-                types_result = {}
-                for type_name in embeddings1[relation_name].keys():
+#             for relation_name in embeddings1.keys():
+#                 types_result = {}
+#                 for type_name in embeddings1[relation_name].keys():
 
-                    model_predition_score = [ 1 - cosine(embeddings1[relation_name][type_name][j], embeddings2[relation_name][type_name][j]) for j in range(embeddings1[relation_name][type_name].shape[0])]
+#                     model_predition_score = [ 1 - cosine(embeddings1[relation_name][type_name][j], embeddings2[relation_name][type_name][j]) for j in range(embeddings1[relation_name][type_name].shape[0])]
 
             
 
-                    r, p = spearmanr(gold_scores, model_predition_score)
-                    types_result[type_name] = r
+#                     r, p = spearmanr(gold_scores, model_predition_score)
+#                     types_result[type_name] = r
                 
                 
-                relation_result[relation_name] = types_result
-                print(corp_names[i], relation_name, types_result)
-            scores[corp_names[i]] = relation_result
-        pickle.dump(scores, fout)
+#                 relation_result[relation_name] = types_result
+#                 print(corp_names[i], relation_name, types_result)
+#             scores[corp_names[i]] = relation_result
+#         pickle.dump(scores, fout)
        
-    return scores
+#     return scores
         
 
 
@@ -397,15 +397,15 @@ def sd_test(sess, model, data, batch_size, c, l, r):
 
 
     
-    with open("pd_gensim_result_c_%d_l_%d_r_%.3f.p "%(int(c), l, r), "wb") as fout:
+    # with open("pd_gensim_result_c_%d_l_%d_r_%.3f.p "%(int(c), l, r), "wb") as fout:
 
-        amod_acc = np.sum(pos_amod > neg_amod)/ batch_size 
-        nsubj_acc = np.sum(pos_nsubj > neg_nsubj) / batch_size
-        dobj_acc = np.sum(pos_dobj > neg_dobj) / batch_size
-        total_acc = (np.sum(pos_amod > neg_amod) + np.sum(pos_nsubj > neg_nsubj) + np.sum(pos_dobj > neg_dobj))/ (batch_size * 3)
+    amod_acc = np.sum(pos_amod > neg_amod)/ batch_size 
+    nsubj_acc = np.sum(pos_nsubj > neg_nsubj) / batch_size
+    dobj_acc = np.sum(pos_dobj > neg_dobj) / batch_size
+    total_acc = (np.sum(pos_amod > neg_amod) + np.sum(pos_nsubj > neg_nsubj) + np.sum(pos_dobj > neg_dobj))/ (batch_size * 3)
 
-        pickle.dump({"amod": amod_acc, "nsubj": nsubj_acc, "dobj": dobj_acc, "overall": total_acc}, fout)
-        print("sd scores:", amod_acc, nsubj_acc, dobj_acc, total_acc)
+        # pickle.dump({"amod": amod_acc, "nsubj": nsubj_acc, "dobj": dobj_acc, "overall": total_acc}, fout)
+    print("sd scores:", amod_acc, nsubj_acc, dobj_acc, total_acc)
 
 
 
@@ -428,25 +428,25 @@ def main():
     
 
     os.environ["CUDA_VISIBLE_DEVICES"]=args.GPU
-    statsPath = "/home/data/corpora/MultiplexEmbeddingMatrixAndEmbeddings/2018_corpus_stats.pkl"
-    dataPath = "/home/data/corpora/wikipedia/WIKI/Parsed_data/"
+    statsPath = "/home/jbai/ChineseParserUsage/corpus_stats.pkl"
+    dataPath = "/home/data/corpora/wikipedia/ParsedChineseWiki/"
 
 
     num_cross = str(args.cross_validate)
 
     train_data = DataLoader(dataPath)
     train_data.read_stats(statsPath)
-    train_data.load_pairs_counting("/home/data/corpora/MultiplexEmbeddingMatrixAndEmbeddings/PD_data/train_count_cv_" + num_cross + ".pkl")
-    train_data.load_argument_sample_table("new_sample_table.p")
+    train_data.load_pairs_counting("/home/jbai/ChineseParserUsage/count.pkl")
+    train_data.load_argument_sample_table("/home/jbai/ChineseParserUsage/sample_table.pkl")
 
     test_data = DataLoader(dataPath)
     test_data.read_stats(statsPath)
-    test_data.load_pairs_counting("/home/data/corpora/MultiplexEmbeddingMatrixAndEmbeddings/PD_data/test_count_cv_" + num_cross + ".pkl")
-    test_data.load_argument_sample_table("new_sample_table.p")
+    test_data.load_pairs_counting("/home/jbai/ChineseParserUsage/count.pkl")
+    test_data.load_argument_sample_table("/home/jbai/ChineseParserUsage/sample_table.pkl")
 
 
 
-    modelPath = "/home/data/corpora/Multi-Relational-Word-Embeddings-for-Selectional-Preference-Acquisition/relation_text_embedding/wiki2018_all_relation_word2vec.model"
+    modelPath = "/home/data/corpora/MultiRelChineseEmbeddings/chinese_multirelation.model"
     word2vecModel= Word2Vec.load(modelPath)
 
     context_wv = KeyedVectors(vector_size=300)
@@ -478,28 +478,6 @@ def main():
     # print("finish load pre-trained vectors")
 
 
-    wordsim_dir = "./Word-similarity-dataset/Simlex/"
-
-
-    with open(wordsim_dir + "verb.json", "r") as f:
-        verb_list = json.load(f)
-        # print("simlex verb ready")
-
-    with open(wordsim_dir + "noun.json", "r") as f:
-        noun_list = json.load(f)
-        # print("simlex noun ready")
-
-    with open(wordsim_dir + "adjective.json", "r") as f:
-        adjective_list = json.load(f)
-        # print("simlex adjective ready")
-
-    with open(wordsim_dir + "all.json", "r") as f:
-        all_list = json.load(f)
-        # print("simlex all ready")
-
-    simlex_corpora = [verb_list, noun_list, adjective_list, all_list]
-
-    simlex_names = ["verb_list", "noun_list", "adjective_list", "all_list"]
 
     m = Model(train_data, args)
 
@@ -518,10 +496,7 @@ def main():
             # print("Center Embeddings Initiated")
 
         sd_test(sess, m, test_data, 100000, num_cross, args.relational_embedding_size, args.restrict)
-        
-        ws_test(sess, m, test_data, simlex_corpora, num_cross, args.relational_embedding_size, args.restrict)
 
-  
         num_epoch = args.num_epoch
         num_batch = 512
 
@@ -557,9 +532,7 @@ def main():
             # PD test
             amod_acc, nsubj_acc, dobj_acc, total_acc = sd_test(sess, m, train_data, 100000, num_cross, args.relational_embedding_size, args.restrict)
             amod_acc, nsubj_acc, dobj_acc, total_acc = sd_test(sess, m, test_data, 100000, num_cross, args.relational_embedding_size, args.restrict)
-            ws_test(sess, m, test_data, simlex_corpora, num_cross, args.relational_embedding_size, args.restrict)  
-            
-        
+           
 
 
 if __name__ == "__main__":
