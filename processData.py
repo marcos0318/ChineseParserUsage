@@ -33,7 +33,7 @@ corpus_stats["word2id"] = {word: i for i, word in enumerate(wordList)}
 corpus_stats["vocab_size"] = len(wordList)
 
 print(corpus_stats)
-with open("corpus_stats.pkl", "w") as fout:
+with open("corpus_stats.pkl", "wb") as fout:
     pickle.dump(corpus_stats, fout)
 
 
@@ -63,11 +63,11 @@ for i, fileName in enumerate([fileNameamod, fileNamedobj, fileNamensubj]):
     sampleTableResult[rel[i]] = argumentCounter
 
 
-with open("count.pkl", "w") as fout:
+with open("count.pkl", "wb") as fout:
     pickle.dump(pairsCountingResult, fout)
 
 
-with open("sample_table.pkl", "w") as fout:
+with open("sample_table.pkl", "wb") as fout:
     pickle.dump(sampleTableResult, fout)
 
        
