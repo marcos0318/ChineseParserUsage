@@ -8,7 +8,7 @@ import os
 
 
 class DataLoader:
-    def __init__(self):
+    def __init__(self, dataPath):
         self.dataPath = dataPath
         self.thres = 1
       
