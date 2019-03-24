@@ -535,7 +535,7 @@ def main():
            
         # save the center, relational, and transpose matrix
 
-        center_emb, amod_emb, nsubj_emb, dobj_emb = sess.run([m.center_emb, m.amod_emb, m.nsubj_emb, m.dobj_emb)
+        center_emb, amod_emb, nsubj_emb, dobj_emb = sess.run([m.center_emb, m.amod_emb, m.nsubj_emb, m.dobj_emb])
         with open('center_embedding.txt', 'w') as file_:
             for i in range(train_data.vocab_size):
               embed = center_emb[i, :]
@@ -547,7 +547,7 @@ def main():
               embed = amod_emb[i, :]
               word = train_data.id2word[i]
               file_.write('%s %s\n' % (word, ' '.join(map(str, embed))))
-              
+
         with open('dobj_embedding.txt', 'w') as file_:
             for i in range(train_data.vocab_size):
               embed = dobj_emb[i, :]
