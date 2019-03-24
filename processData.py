@@ -23,7 +23,7 @@ with open(fileName, "r") as f:
 wordCounter = Counter(wordList).most_common(100000)
 # pairCounter = Counter(pairList)
 
-wordList = list(wordCounter)
+wordList = list(dict(wordCounter).keys())
 
 print(wordList[:10])
 
@@ -60,11 +60,11 @@ for i, fileName in enumerate([fileNameamod, fileNamedobj, fileNamensubj]):
             argumentList.append(words[1])
 
     pairCounter = dict(Counter(pairList))
-    pairsCountingResult[rel[i]] = pairCounter
+    pairsCountingResult[rels[i]] = pairCounter
 
 
     argumentCounter = dict(Counter(argumentList))
-    sampleTableResult[rel[i]] = argumentCounter
+    sampleTableResult[rels[i]] = argumentCounter
 
 
 with open("count.pkl", "wb") as fout:
