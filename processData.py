@@ -67,6 +67,11 @@ for i, fileName in enumerate([fileNameamod, fileNamedobj, fileNamensubj]):
     sampleTableResult[rels[i]] = argumentCounter
 
 
+for rel in rels:
+    print(list(pairsCountingResult[rel])[:10])
+    print(list(sampleTableResult[rel])[:10])
+
+
 with open("count.pkl", "wb") as fout:
     pickle.dump(pairsCountingResult, fout)
 
