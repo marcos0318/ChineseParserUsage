@@ -29,7 +29,7 @@ def parse_sentense_with_stanford(input_sentence, nlp_id=0):
     # wget --post-data '我喜欢吃美味的汉堡' 'localhost:10011/?properties={"annotators":"tokenize,depparse,lemma","outputFormat":"json"}' -O - 
 
     # TODO: Replace the tmp output
-    request = """wget --post-data '""" + cleaned_sentence + """' 'localhost:""" + str(10001 + nlp_id) + """/?properties={"annotators":"tokenize,depparse,pos,","outputFormat":"json"}' -O - """
+    request = """wget --post-data '""" + cleaned_sentence + """' 'localhost:""" + str(10000 + nlp_id) + """/?properties={"annotators":"tokenize,depparse,pos","outputFormat":"json"}' -O - """
 
   
     respondStr = subprocess.check_output(request, shell=True)
