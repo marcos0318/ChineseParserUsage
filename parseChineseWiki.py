@@ -1,5 +1,5 @@
 import os
-import ujson as json
+import json as json
 
 from multiprocessing import Pool
 import subprocess
